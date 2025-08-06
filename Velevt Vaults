@@ -1,0 +1,83 @@
+from pathlib import Path
+
+# Create a simple premium HTML landing page for "The Velvet Vault"
+html_content = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Velvet Vault</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0e0e0e;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            text-align: center;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        h1 {
+            font-size: 3.5em;
+            color: gold;
+            margin-bottom: 0.2em;
+        }
+        p {
+            font-size: 1.2em;
+            line-height: 1.8em;
+            color: #ccc;
+        }
+        .cta-button {
+            background-color: gold;
+            color: black;
+            padding: 20px 40px;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 40px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .vault-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 40px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>The Velvet Vault</h1>
+        <p>Enter the most exclusive digital space on the internet.<br>
+        One-time access for €700. Zero noise. Just timeless signal.</p>
+        <a href="#" class="cta-button">Request Access</a>
+        <img src="velvet_vault_access_pass_mockup.png" class="vault-image" alt="Velvet Vault Pass">
+    </div>
+</body>
+</html>
+"""
+
+# Save HTML and copy image to folder
+site_path = Path("/mnt/data/velvet_vault_website")
+site_path.mkdir(parents=True, exist_ok=True)
+(site_path / "index.html").write_text(html_content)
+
+# Copy the previously generated image mockup into the website folder
+image_src = Path("/mnt/data/velvet_vault_access_pass_mockup.png")
+image_dst = site_path / image_src.name
+image_dst.write_bytes(image_src.read_bytes())
+
+# Create ZIP archive for download
+zip_path = Path("/mnt/data/Velvet_Vault_Exclusive_Website.zip")
+with zipfile.ZipFile(zip_path, 'w') as zipf:
+    for file in site_path.iterdir():
+        zipf.write(file, arcname=file.name)
+
+zip_path.name
